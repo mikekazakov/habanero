@@ -1,6 +1,6 @@
 // tiny_string.h
 //
-// Copyright (c) 2014 Michael Kazakov
+// Copyright (c) 2014 Michael Kazakov <mike.kazakov@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -226,7 +226,7 @@ private:
     void __construct_empty() noexcept;
     void __construct( size_type count, char ch );
     void __construct( const char *s, size_type count );
-    __ctrl *__allocate_ctrl( size_type capacity );
+    static __ctrl *__allocate_ctrl( size_type capacity );
     void __move_to_ctrl( size_type new_capacity );
     void __grow_ctrl( size_type new_capacity );
     void __set_size( size_type new_size );
