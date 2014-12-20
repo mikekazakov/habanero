@@ -18,3 +18,21 @@ The reason why this class exists is a situation when you need to store a string 
 
 So tiny_string can be used - for strings up to 6 characters it will use a built-in buffer and will use malloc/realloc for larger strings.
 
+
+cpp/dispatch_cpp
+-----------
+A set of functions providing modern C++ interface for libdispatch API (also known as gcd - Grand Cental Dispatch).
+They use C++11 lambdas as a callback, so you can write something like this:
+
+dispatch_after( 10s, dispatch_get_main_queue(), []{ puts("ten seconds after..."); } );
+
+Following functions are wrapped and are available with the same names via C++ overloading resolution:
+  * dispatch_async
+  * dispatch_sync
+  * dispatch_apply
+  * dispatch_after
+  * dispatch_barrier_async
+  * dispatch_barrier_sync
+
+
+
