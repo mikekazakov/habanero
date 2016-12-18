@@ -89,7 +89,12 @@ The reason why this class exists is a situation when you need to store a string 
 
 So tiny_string can be used - for strings up to 6 characters it will use a built-in buffer and will use malloc/realloc for larger strings.
 
-
-
+Habanero/variable_container.h
+-----------
+Tempate container, which underlying structure is defined in run-time. Container access is based on integer index. Container can take form of 3 states: a single value - T, a sparse set of T objects - unordered_map<T>, or a dense set of T objects - vector<T>. Interface differs a bit from generic STL containers:
+  * mode() tells in which state this container is.
+  * reset() changes the container state.
+  * has() method to probe is there's an object at some index.
+  * is_contiguous()/compress_contiguous() lets compress sparse type into dense type. 
 
 
