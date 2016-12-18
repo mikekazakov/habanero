@@ -14,6 +14,10 @@ Habanero/CFDefaultsCPP.h
 -----------
 Routines to work with User Defaults (CFPreferences / NSUserDefaults) directly from C++. There're variants to get value directly, regardless of it's presence, or to get it via optional<> to check if it is actually present in defaults map.
 
+Habanero/CommonPaths.h
+-----------
+Some routines to access persistent directory locations. Contained in CommonPaths:: namespace.
+
 cpp/tiny_string
 -----------
 tiny_string is a std::string implementation with a small sizeof - 8 bytes. It assumes the following:
