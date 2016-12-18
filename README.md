@@ -1,13 +1,18 @@
 Habanero
 ========
 Open repo with some useful stuff I produce sometimes.
-
+Mostly C++ based and oriented for Mac(MacOSX/OSX/macOS) working environment (some stuff might work on iOS-based OSes as well).
+This code is using C++14 with some intrusions of coming C++17 via std::experimental.
+The library also assumes x64 build targets.
 
 Habanero/CFStackAllocator.h
 -----------
 It's stack-based allocator for CoreFoundation objects. Might be useful for fast creating and processing some small objects, like CFStringRef. Obviously, object allocated with CFStackAllocator should not leak outside the function it was created in,
 since this will lead to crash. CFStackAllocator is much faster than stock CoreFoundation allocator, but should be used with care.
 
+Habanero/CFDefaultsCPP.h
+-----------
+Routines to work with User Defaults (CFPreferences / NSUserDefaults) directly from C++. There're variants to get value directly, regardless of it's presence, or to get it via optional<> to check if it is actually present in defaults map.
 
 cpp/tiny_string
 -----------
