@@ -18,6 +18,10 @@ Habanero/CommonPaths.h
 -----------
 Some routines to access persistent directory locations. Contained in CommonPaths:: namespace.
 
+Habanero/spinlock.h
+-----------
+Spinlock implementation based on C++11 atomics, conforming BasicLockable concept. When thread can't acquire the lock, it will lower it's priority via Mach's swtch_pri() syscall. Also provides useful LOCK_GUARD(lock_object){...} macro and call_locked(lock_object, [=]{....}) template function.
+
 cpp/tiny_string
 -----------
 tiny_string is a std::string implementation with a small sizeof - 8 bytes. It assumes the following:
