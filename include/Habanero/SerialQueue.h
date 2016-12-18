@@ -1,72 +1,59 @@
-//
-//  DispatchQueue.h
-//  Files
-//
-//  Created by Michael G. Kazakov on 20.12.13.
-//  Copyright (c) 2013 Michael G. Kazakov. All rights reserved.
-//
-
+/* Copyright (c) 2013-2016 Michael G. Kazakov
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 #pragma once
 
 #include <memory>
 #include <functional>
-#include <mutex>
-
+#include <atomic>
 #include "dispatch_cpp.h"
 #include "spinlock.h"
 
-class SerialQueue//T : public std::enable_shared_from_this<SerialQueueT>
+class SerialQueue
 {
 public:
     SerialQueue( const char *_label = nullptr );
-    ~SerialQueue();
     
     /**
-     * Just a form to call the long Run(..) version with dummy parameter
+     * Will invoke Stop() and Wait() inside.
      */
-//    void Run( std::function<void()> _block );
+    ~SerialQueue();
+    
+     /**
+     * Starts _f asynchronously in this queue.
+     */
     template <class T>
     void Run( T _f ) const;
     
-    
     /**
-     * Starts _block asynchronously in this queue.
-     * Run will not start any task if IsStopped() is true.
-     */
-//    void Run( std::function<void(const std::shared_ptr<SerialQueueT> &_que)> _block );
-    
-    /**
-     * Run block synchronous against queue.
-     * Will not run block if currently IsStopped() is true.
-     * Will not call OnDry/OnWet/OnChange and will not change queue's- length.
-     */
-//    void RunSync( std::function<void(const std::shared_ptr<SerialQueueT> &_que)> _block );
-
-    /**
-     * Run block synchronous againt current queue, just for client's convenience.
-     * Will not run block if currently IsStopped() is true.
-     * Will not call OnDry/OnWet/OnChange and will not change queue's- length.
-     */
-//    void RunSyncHere( std::function<void(const std::shared_ptr<SerialQueueT> &_que)> _block );
-    
-    /**
-     * Raised IsStopped() flag so currently running task can caught it.
-     * Will skip any enqueued tasks and not add any more until became dry, then will automaticaly lower this flag
+     * Raises IsStopped() flag so currently running tasks can caught it.
+     * Will hold this flag more until queue became dry, then will automaticaly lower this flag.
      */
     void Stop();
     
     /**
-     * Synchronously wait until queue became dry. Note that OnDry() will be called before Wait() will return
+     * Synchronously waits until queue became dry, if queue is not Empty().
+     * Note that OnDry() will be called before Wait() will return.
      */
     void Wait();
     
     /**
-     * Return value of a stop flag.
+     * Returns value of the stop flag.
      */
     bool IsStopped() const;
     
     /**
-     * Returns count of block commited into queue, including current running block, if any.
+     * Returns count of block commited into queue, including currently running block, if any.
      * Zero returned length means that queue is dry.
      */
     int Length() const noexcept;
@@ -78,24 +65,27 @@ public:
     
     /**
      * Sets handler to be called when queue becomes dry (no blocks are commited or running).
+     * Stop flag will be lowered automatically anyway.
+     * Might be called from undefined background thread.
+     * Will be called even on Wait() inside ~SerialQueue().
+     * Reentrant.
      */
-    void OnDry( std::function<void()> _on_dry );
+    void SetOnDry( std::function<void()> _on_dry );
     
     /**
      * Sets handler to be called when queue becomes wet (when block is commited to run in it).
+     * Might be called from undefined background thread.
+     * Reentrant.
      */
-    void OnWet( std::function<void()> _on_wet );
+    void SetOnWet( std::function<void()> _on_wet );
     
     /**
-     * Sets handler to be called when queue length is changed.
+     * Sets handler to be called very time when queue length is changed.
+     * Might be called from undefined background thread.
+     * Will be called even on Wait() inside ~SerialQueue().
+     * Reentrant.
      */
-    void OnChange( std::function<void()> _on_change );
-    
-    /**
-     * Actually make_shared<SerialQueueT>().
-     */
-//    static std::shared_ptr<SerialQueueT> Make(const char *_label = NULL);
-//    static std::shared_ptr<SerialQueueT> Make(const std::string &_label);
+    void SetOnChange( std::function<void()> _on_change );
     
 private:
     SerialQueue(const SerialQueue&) = delete;
@@ -105,19 +95,14 @@ private:
     void FireDry() const;
     void FireWet() const;
     void FireChanged() const;
-//    dispatch_queue   m_Queue;
-    dispatch_queue_t      m_Queue;    
-    mutable std::atomic_int       m_Length = {0};
-    mutable std::atomic_bool      m_Stopped = {false};
-    
-    mutable spinlock m_CallbackLock;
-    std::function<void()> m_OnDry;
-    std::function<void()> m_OnWet;
-    std::function<void()> m_OnChange;
+    dispatch_queue_t            m_Queue;
+    mutable std::atomic_int     m_Length = {0};
+    mutable std::atomic_bool    m_Stopped = {false};
+    mutable spinlock            m_CallbackLock;
+    std::shared_ptr<std::function<void()>>  m_OnDry;
+    std::shared_ptr<std::function<void()>>  m_OnWet;
+    std::shared_ptr<std::function<void()>>  m_OnChange;
 };
-
-//typedef std::shared_ptr<SerialQueueT> SerialQueue;
-
 
 template <class T>
 inline void SerialQueue::Run( T _f ) const
@@ -134,27 +119,3 @@ inline void SerialQueue::Run( T _f ) const
                          dq->Decrement();
                      });
 }
-
-/*
-void SerialQueueT::Run( function<void(const shared_ptr<SerialQueueT> &_que)> _block )
-{
-    if(m_Stopped) // won't push any the tasks until we're stopped
-        return;
-    
-    if((++m_Length) == 1)
-        BecameWet();
-    Changed();
-    
-    __block auto block = move(_block);
-    __block auto me = shared_from_this();
-    
-    m_Queue.async(^{
-        
-        if(me->m_Stopped == false)
-            block(me);
-        
-        if(--(me->m_Length) == 0)
-            BecameDry();
-        Changed();
-    });
-}*/

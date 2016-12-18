@@ -1,29 +1,19 @@
-//
-//  DispatchQueue.mm
-//  Files
-//
-//  Created by Michael G. Kazakov on 20.12.13.
-//  Copyright (c) 2013 Michael G. Kazakov. All rights reserved.
-//
-
-#include <Habanero/DispatchQueue.h>
+/* Copyright (c) 2013-2016 Michael G. Kazakov
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
+#include <Habanero/SerialQueue.h>
 
 using namespace std;
-
-////////////////////////////////////////////////////////////////////////////////
-// SerialQueueT implementation
-////////////////////////////////////////////////////////////////////////////////
-/*std::shared_ptr<SerialQueue> SerialQueue::Make(const char *_label)
-{
-    return std::make_shared<SerialQueue>(_label);
-};
-
-std::shared_ptr<SerialQueueT> SerialQueueT::Make(const std::string &_label)
-{
-    return Make(_label.c_str());
-};
-*/
-//m_Queue
 
 SerialQueue::SerialQueue(const char *_label):
     m_Queue( dispatch_queue_create(_label, DISPATCH_QUEUE_SERIAL) )
@@ -36,22 +26,31 @@ SerialQueue::~SerialQueue()
     Wait();
 }
 
-void SerialQueue::OnDry( function<void()> _on_dry )
+void SerialQueue::SetOnDry( function<void()> _cb )
 {
-    lock_guard<spinlock> lock(m_CallbackLock);
-    m_OnDry = _on_dry;
+    std::shared_ptr<std::function<void()>> cb =
+        std::make_shared<std::function<void()>>( move(_cb) );
+    LOCK_GUARD(m_CallbackLock) {
+        m_OnDry = cb;
+    }
 }
 
-void SerialQueue::OnWet( function<void()> _on_wet )
+void SerialQueue::SetOnWet( function<void()> _cb )
 {
-    lock_guard<spinlock> lock(m_CallbackLock);
-    m_OnWet = _on_wet;
+    std::shared_ptr<std::function<void()>> cb =
+        std::make_shared<std::function<void()>>( move(_cb) );
+    LOCK_GUARD(m_CallbackLock) {
+        m_OnWet = cb;
+    }
 }
 
-void SerialQueue::OnChange( function<void()> _on_change )
+void SerialQueue::SetOnChange( function<void()> _cb )
 {
-    lock_guard<spinlock> lock(m_CallbackLock);
-    m_OnChange = _on_change;
+    std::shared_ptr<std::function<void()>> cb =
+        std::make_shared<std::function<void()>>( move(_cb) );
+    LOCK_GUARD(m_CallbackLock) {
+        m_OnChange = cb;
+    }
 }
 
 void SerialQueue::Stop()
@@ -79,63 +78,12 @@ void SerialQueue::Decrement() const
     FireChanged();
 }
 
-/*
-void SerialQueueT::Run( function<void()> _block )
-{
-    Run( [_block = move(_block)](const shared_ptr<SerialQueueT> &_unused) { _block(); } );
-}
-
-void SerialQueueT::Run( function<void(const shared_ptr<SerialQueueT> &_que)> _block )
-{
-    if(m_Stopped) // won't push any the tasks until we're stopped
-        return;
-    
-    if((++m_Length) == 1)
-        BecameWet();
-    Changed();
-    
-    __block auto block = move(_block);
-    __block auto me = shared_from_this();
-    
-    m_Queue.async(^{
-        
-        if(me->m_Stopped == false)
-            block(me);
-        
-        if(--(me->m_Length) == 0)
-            BecameDry();
-        Changed();
-    });
-}
-
-void SerialQueueT::RunSync( function<void(const shared_ptr<SerialQueueT> &_que)> _block )
-{
-    if(m_Stopped) // won't push any the tasks until we're stopped
-        return;
-    
-    __block auto block = move(_block);
-    __block auto me = shared_from_this();
-    
-    m_Queue.sync(^{
-        block(me);
-    });
-}
-
-void SerialQueueT::RunSyncHere( function<void(const shared_ptr<SerialQueueT> &_que)> _block )
-{
-    if(m_Stopped) // won't push any the tasks until we're stopped
-        return;
-    _block(shared_from_this());
-}
-*/
 void SerialQueue::Wait()
 {
-    if( m_Length == 0 )
+    if( Empty() )
         return;
     
-    //m_Queue.sync(^{});
-    //dispatch_group_wait(m_Group, DISPATCH_TIME_FOREVER);
-    dispatch_sync_f(m_Queue, nullptr, [](void* _p){});
+    dispatch_sync_f( m_Queue, nullptr, [](void* _p){} );
 }
 
 int SerialQueue::Length() const noexcept
@@ -152,21 +100,30 @@ void SerialQueue::FireDry() const
 {
     m_Stopped = false;
 
-    lock_guard<spinlock> lock(m_CallbackLock);
-    if(m_OnDry)
-        m_OnDry();
+    std::shared_ptr<std::function<void()>> cb;
+    LOCK_GUARD(m_CallbackLock) {
+        cb = m_OnDry;
+    }
+    if( cb && *cb )
+        (*cb)();
 }
 
 void SerialQueue::FireWet() const
 {
-    lock_guard<spinlock> lock(m_CallbackLock);
-    if(m_OnWet)
-        m_OnWet();
+    std::shared_ptr<std::function<void()>> cb;
+    LOCK_GUARD(m_CallbackLock) {
+        cb = m_OnWet;
+    }
+    if( cb && *cb )
+        (*cb)();
 }
 
 void SerialQueue::FireChanged() const
 {
-    lock_guard<spinlock> lock(m_CallbackLock);
-    if(m_OnChange)
-        m_OnChange();
+    std::shared_ptr<std::function<void()>> cb;
+    LOCK_GUARD(m_CallbackLock) {
+        cb = m_OnChange;
+    }
+    if( cb && *cb )
+        (*cb)();
 }
