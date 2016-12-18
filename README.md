@@ -2,7 +2,7 @@ Habanero
 ========
 Open repo with some useful stuff I produce sometimes.
 Mostly C++ based and oriented for Mac(MacOSX/OSX/macOS) working environment (some stuff might work on iOS-based OSes as well).
-This code is using C++14 with some intrusions of coming C++17 via std::experimental.
+This code is C++14 with some intrusions of coming C++17 via std::experimental.
 The library also assumes x64 build targets.
 
 Habanero/CFStackAllocator.h
@@ -17,6 +17,40 @@ Routines to work with User Defaults (CFPreferences / NSUserDefaults) directly fr
 Habanero/CommonPaths.h
 -----------
 Some routines to access persistent directory locations. Contained in CommonPaths:: namespace.
+
+Habanero/dispatch_cpp.h
+-----------
+A set of functions providing modern C++ interface for libdispatch API (also known as gcd - Grand Cental Dispatch).
+They use C++11 lambdas as a callbacks and std::chrono values, so you can write something like this:
+
+dispatch_after( 10s, dispatch_get_main_queue(), []{ puts("ten seconds after..."); } );
+
+Following functions are wrapped and are available with the same names via C++ overloading resolution:
+  * dispatch_async
+  * dispatch_sync
+  * dispatch_apply
+  * dispatch_after
+  * dispatch_barrier_async
+  * dispatch_barrier_sync
+Also some useful additions include these:
+  * dispatch_is_main_queue
+  * dispatch_assert_main_queue
+  * dispatch_assert_background_queue
+  * dispatch_to_main_queue
+  * dispatch_to_default
+  * dispatch_to_background
+  * dispatch_to_main_queue_after
+  * dispatch_to_background_after
+  * dispatch_or_run_in_main_queue
+
+Habanero/Hash.h
+-----------
+Hash/checksum calculation facility, supporting Adler32/CRC32/MD2/MD4/MD5/SHA1_160/SHA2_224/SHA2_256/SHA2_384/SHA2_512.
+Relies on zlib and CommonCrypto routines.
+
+Habanero/mach_time.h
+-----------
+Provides std::chrono::nanoseconds machtime() function, which tells the current relative kernel time in safe form of std::chrono. Also has a tiny MachTimeBenchmark time-measuring facility.
 
 Habanero/spinlock.h
 -----------
@@ -38,20 +72,6 @@ The reason why this class exists is a situation when you need to store a string 
 So tiny_string can be used - for strings up to 6 characters it will use a built-in buffer and will use malloc/realloc for larger strings.
 
 
-cpp/dispatch_cpp
------------
-A set of functions providing modern C++ interface for libdispatch API (also known as gcd - Grand Cental Dispatch).
-They use C++11 lambdas as a callback, so you can write something like this:
-
-dispatch_after( 10s, dispatch_get_main_queue(), []{ puts("ten seconds after..."); } );
-
-Following functions are wrapped and are available with the same names via C++ overloading resolution:
-  * dispatch_async
-  * dispatch_sync
-  * dispatch_apply
-  * dispatch_after
-  * dispatch_barrier_async
-  * dispatch_barrier_sync
 
 
 
