@@ -43,6 +43,10 @@ Also some useful additions include these:
   * dispatch_to_background_after
   * dispatch_or_run_in_main_queue
 
+Habanero/DispatchGroup.h
+-----------
+High-level wrapper abstraction on top of GCD's dispatch_group_async(), with callback signals about group's load state and info about amount of currently running tasks. Like dispatch_cpp.h, DispatchGroup is compatible with C++ lambdas and function<>'s.
+
 Habanero/Hash.h
 -----------
 Hash/checksum calculation facility, supporting Adler32/CRC32/MD2/MD4/MD5/SHA1_160/SHA2_224/SHA2_256/SHA2_384/SHA2_512.
@@ -51,6 +55,14 @@ Relies on zlib and CommonCrypto routines.
 Habanero/mach_time.h
 -----------
 Provides std::chrono::nanoseconds machtime() function, which tells the current relative kernel time in safe form of std::chrono. Also has a tiny MachTimeBenchmark time-measuring facility.
+
+Habanero/SerialQueue.h
+-----------
+High-level wrapper abstraction on top of GCD's dispatch_async() serial execution with following additions:
+  * Callback signals about queue's load state.
+  * IsStopped() concept, lets you to flag running tasks as being discarded. The IsStopped() flag is automatically cleared with queue becomes empty.
+  * Queue's length probing.
+  * Compatible with C++ lambdas and function<>'s.
 
 Habanero/spinlock.h
 -----------
