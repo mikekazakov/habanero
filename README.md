@@ -1,6 +1,12 @@
-habanero
+Habanero
 ========
 Open repo with some useful stuff I produce sometimes.
+
+
+Habanero/CFStackAllocator.h
+-----------
+It's stack-based allocator for CoreFoundation objects. Might be useful for fast creating and processing some small objects, like CFStringRef. Obviously, object allocated with CFStackAllocator should not leak outside the function it was created in,
+since this will lead to crash. CFStackAllocator is much faster than stock CoreFoundation allocator, but should be used with care.
 
 
 cpp/tiny_string
