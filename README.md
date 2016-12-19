@@ -58,6 +58,16 @@ Habanero/Hash.h
 Hash/checksum calculation facility, supporting Adler32/CRC32/MD2/MD4/MD5/SHA1_160/SHA2_224/SHA2_256/SHA2_384/SHA2_512.
 Relies on zlib and CommonCrypto routines.
 
+Habanero/IdleSleepPreventer.h
+-----------
+IdleSleepPreventer class, which provides RAII-style interface for MacOSX's IOKit to prevent system sleep while app is doing something meaningful:
+```C++
+{
+auto insomnia_promise = IdleSleepPreventer::Instance().GetPromise();
+// perform task for a long time
+}
+```
+
 Habanero/mach_time.h
 -----------
 Provides std::chrono::nanoseconds machtime() function, which tells the current relative kernel time in safe form of std::chrono. Also has a tiny MachTimeBenchmark time-measuring facility.
