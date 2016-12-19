@@ -81,7 +81,7 @@ Provides std::chrono::nanoseconds machtime() function, which tells the current r
 
 Habanero/Observable.h
 -----------
-Provides a generic thread-safe events observation facility. Client's subscription yields a RAII-style ObservationTicket, which unsubscribe client upon destruction. Event's can be identified via bit mask, so up to 64 events can be set up. ObservableBase interface may be entered from callbacks. General usage principle follows this scheme:
+Provides a generic thread-safe events observation facility. Client's subscription yields a RAII-style ObservationTicket, which unsubscribe client upon destruction. Event's can be identified and fired via bit mask, so up to 64 event types can be set up. ObservableBase interface may be entered from callbacks. General usage principle follows this scheme:
 ```C++
 struct Foo : public ObservableBase {
     using ObservationTicket = ObservableBase::ObservationTicket;
