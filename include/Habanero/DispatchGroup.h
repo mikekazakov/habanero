@@ -53,9 +53,14 @@ public:
     void Wait() const noexcept;
     
     /**
-     * Returnes amount of blocks currently running in this group.
+     * Returns amount of blocks currently running in this group.
      */
     int Count() const noexcept;
+    
+    /**
+     * Actually returns Count() == 0. Just a syntax sugar.
+     */
+    bool Empty() const noexcept;
     
     /**
      * Set a callback function which will be called when Count() becomes zero.

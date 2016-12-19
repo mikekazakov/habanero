@@ -1,11 +1,16 @@
-//
-//  algo.h
-//  Habanero
-//
-//  Created by Michael G. Kazakov on 11/09/15.
-//  Copyright (c) 2015 MIchael Kazakov. All rights reserved.
-//
-
+/* Copyright (c) 2015-2016 Michael G. Kazakov
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 #pragma once
 
 #include <algorithm>
@@ -13,15 +18,6 @@
 #include <string>
 #include <assert.h>
 #include <stdio.h>
-
-/**
- * return max(lower, min(n, upper));
- */
-template <typename T__>
-inline T__ clip(const T__& n, const T__& lower, const T__& upper)
-{
-    return max(lower, min(n, upper));
-}
 
 template <typename T>
 auto linear_generator( T _base, T _step )
@@ -100,9 +96,9 @@ auto at_scope_end( T _l )
 inline bool has_prefix( const std::string &_string, const std::string &_prefix )
 {
     return _string.size() >= _prefix.size() &&
-        std::equal( begin(_prefix),
-                    end(_prefix),
-                    begin(_string));
+        std::equal( std::begin(_prefix),
+                    std::end(_prefix),
+                    std::begin(_string));
 }
 
 class upward_flag

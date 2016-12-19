@@ -36,7 +36,6 @@
 		CFD62BB61C99C2AE0021EE7F /* KVO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD62BA91C99C2AE0021EE7F /* KVO.cpp */; };
 		CFD62BB71C99C2AE0021EE7F /* mach_time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD62BAA1C99C2AE0021EE7F /* mach_time.cpp */; };
 		CFD62BB81C99C2AE0021EE7F /* tiny_string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD62BAB1C99C2AE0021EE7F /* tiny_string.cpp */; };
-		CFD62BB91C99C2AE0021EE7F /* variable_container.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD62BAC1C99C2AE0021EE7F /* variable_container.cpp */; };
 		CFD62BBC1C99C73E0021EE7F /* chained_strings.h in Headers */ = {isa = PBXBuildFile; fileRef = CFD62BBB1C99C73E0021EE7F /* chained_strings.h */; };
 		CFD62BBE1C99C7480021EE7F /* chained_strings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD62BBD1C99C7480021EE7F /* chained_strings.cpp */; };
 		CFD6DD201D6C44B8006B94C2 /* Observable.h in Headers */ = {isa = PBXBuildFile; fileRef = CFD6DD1F1D6C44B8006B94C2 /* Observable.h */; };
@@ -52,6 +51,7 @@
 		CF9A9F161CACDD490094D6F7 /* CFDefaultsCPP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CFDefaultsCPP.cpp; path = source/CFDefaultsCPP.cpp; sourceTree = "<group>"; };
 		CFB690541E0670FF00BBA5BD /* SerialQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SerialQueue.cpp; path = ../habanero/source/SerialQueue.cpp; sourceTree = "<group>"; };
 		CFB690561E06710900BBA5BD /* SerialQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SerialQueue.h; path = ../habanero/include/Habanero/SerialQueue.h; sourceTree = "<group>"; };
+		CFB6905D1E0677D900BBA5BD /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../habanero/README.md; sourceTree = "<group>"; };
 		CFD62B721C99C19A0021EE7F /* libHabanero.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHabanero.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFD62B861C99C2A60021EE7F /* algo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = algo.h; path = include/Habanero/algo.h; sourceTree = "<group>"; };
 		CFD62B871C99C2A60021EE7F /* CFString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFString.h; path = include/Habanero/CFString.h; sourceTree = "<group>"; };
@@ -75,7 +75,6 @@
 		CFD62BA91C99C2AE0021EE7F /* KVO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KVO.cpp; path = source/KVO.cpp; sourceTree = "<group>"; };
 		CFD62BAA1C99C2AE0021EE7F /* mach_time.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mach_time.cpp; path = source/mach_time.cpp; sourceTree = "<group>"; };
 		CFD62BAB1C99C2AE0021EE7F /* tiny_string.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tiny_string.cpp; path = source/tiny_string.cpp; sourceTree = "<group>"; };
-		CFD62BAC1C99C2AE0021EE7F /* variable_container.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = variable_container.cpp; path = source/variable_container.cpp; sourceTree = "<group>"; };
 		CFD62BBB1C99C73E0021EE7F /* chained_strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = chained_strings.h; path = include/Habanero/chained_strings.h; sourceTree = "<group>"; };
 		CFD62BBD1C99C7480021EE7F /* chained_strings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = chained_strings.cpp; path = source/chained_strings.cpp; sourceTree = "<group>"; };
 		CFD6DD1F1D6C44B8006B94C2 /* Observable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Observable.h; path = include/Habanero/Observable.h; sourceTree = "<group>"; };
@@ -97,6 +96,7 @@
 		CFD62B691C99C19A0021EE7F = {
 			isa = PBXGroup;
 			children = (
+				CFB6905D1E0677D900BBA5BD /* README.md */,
 				CFD62B841C99C2510021EE7F /* Headers */,
 				CFD62B851C99C2590021EE7F /* Source */,
 				CFD62B731C99C19A0021EE7F /* Products */,
@@ -155,7 +155,6 @@
 				CFD6DD211D6C44C1006B94C2 /* Observable.cpp */,
 				CFB690541E0670FF00BBA5BD /* SerialQueue.cpp */,
 				CFD62BAB1C99C2AE0021EE7F /* tiny_string.cpp */,
-				CFD62BAC1C99C2AE0021EE7F /* variable_container.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -260,7 +259,6 @@
 				CFD62BB51C99C2AE0021EE7F /* IdleSleepPreventer.cpp in Sources */,
 				CFD62BAE1C99C2AE0021EE7F /* CommonPaths.cpp in Sources */,
 				CF47DF731E063CCF00AAAF3C /* DispatchGroup.cpp in Sources */,
-				CFD62BB91C99C2AE0021EE7F /* variable_container.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

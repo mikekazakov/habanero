@@ -107,3 +107,8 @@ void DispatchGroup::FireChange() const
     if( cb && *cb )
         (*cb)();
 }
+
+bool DispatchGroup::Empty() const noexcept
+{
+    return Count() == 0;
+}
