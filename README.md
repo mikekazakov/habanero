@@ -62,6 +62,34 @@ Habanero/mach_time.h
 -----------
 Provides std::chrono::nanoseconds machtime() function, which tells the current relative kernel time in safe form of std::chrono. Also has a tiny MachTimeBenchmark time-measuring facility.
 
+Habanero/Observable.h
+-----------
+Provides a generic thread-safe events observation facility. Client's subscription yields a RAII-style ObservationTicket, which unsubscribe client upon destruction. Event's can be identified via bit mask, so up to 64 events can be set up. ObservableBase interface may be entered from callbacks. General usage principle follows this scheme:
+```C++
+struct Foo : public ObservableBase {
+    using ObservationTicket = ObservableBase::ObservationTicket;
+    enum : uint64_t {
+        EventA = 0x0001,
+        EventB = 0x0002,
+    };
+
+    ObservationTicket ObserveEventA( function<void()> _callback ) {
+      return AddObserver( move(_callback), EventA ); }
+    ObservationTicket ObserveEventB( function<void()> _callback ) {
+      return AddObserver( move(_callback), EventB ); }
+
+    void Bar() {
+      // do something useful
+      FireObservers( EventA );
+      // do something even more useful
+      FireObservers( EventA | EventB );
+    }
+};
+// client side:
+auto observation_ticket = m_FooInstance.ObserveEventA( []{
+  cout << "Foo made something useful!" << endl; } );
+```
+
 Habanero/SerialQueue.h
 -----------
 High-level wrapper abstraction on top of GCD's dispatch_async() serial execution with following additions:
