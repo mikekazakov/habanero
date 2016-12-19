@@ -44,6 +44,7 @@ Following functions are wrapped and are available with the same names via C++ ov
   * dispatch_after
   * dispatch_barrier_async
   * dispatch_barrier_sync
+
 Also some useful additions include these:
   * dispatch_is_main_queue
   * dispatch_assert_main_queue
