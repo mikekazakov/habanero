@@ -58,7 +58,14 @@ Also some useful additions include these:
 
 Habanero/DispatchGroup.h
 -----------
-High-level wrapper abstraction on top of GCD's dispatch_group_async(), with callback signals about group's load state and info about amount of currently running tasks. Like dispatch_cpp.h, DispatchGroup is compatible with C++ lambdas and function<>'s.
+High-level wrapper abstraction on top of GCD's dispatch_group_async() - an execution group, with callback signals about group's load state and info about amount of currently running tasks. Like dispatch_cpp.h, DispatchGroup is compatible with C++ lambdas and function<>'s.
+```C++
+DispatchGroup dg;
+dg.SetOnDry( []{ cout << "omg what have we done!"; } );
+dg.Run( []{ /* launch missiles */ } );
+dg.Run( []{ /* estimate fallout at the same time */ } );
+dg.Wait();
+```
 
 Habanero/Hash.h
 -----------
@@ -109,11 +116,28 @@ auto observation_ticket = m_FooInstance.ObserveEventA( []{
 
 Habanero/SerialQueue.h
 -----------
-High-level wrapper abstraction on top of GCD's dispatch_async() serial execution with following additions:
+High-level wrapper abstraction on top of GCD's dispatch_async() serial execution queue with following additions:
   * Callback signals about queue's load state.
   * IsStopped() concept, lets you to flag running tasks as being discarded. The IsStopped() flag is automatically cleared with queue becomes empty.
   * Queue's length probing.
   * Compatible with C++ lambdas and function<>'s.
+```C++
+SerialQueue sq;
+sq.SetOnDry( []{ cout << "ready for orders!"; } );
+sq.Run([&]{
+  if( sq.IsStopped() )
+    return;
+  /* calculate trajectories */
+});
+sq.Run([&]{
+  if( sq.IsStopped() )
+    return;
+  /* launch missiles */
+});
+if( rand() % 2 == 0 )
+  sq.Stop();
+sq.Wait();
+```
 
 Habanero/spinlock.h
 -----------
