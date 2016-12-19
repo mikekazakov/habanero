@@ -8,7 +8,13 @@ The library also assumes x64 build targets.
 
 Habanero/CFDefaultsCPP.h
 -----------
-Routines to work with User Defaults (CFPreferences / NSUserDefaults) directly from C++. There're variants to get value directly, regardless of it's presence, or to get it via optional<> to check if it is actually present in defaults map.
+Routines to work with User Defaults (CFPreferences / NSUserDefaults) directly and safely from C++. There're variants to get value directly, regardless of it's presence, or to get it via optional<> to check if it is actually present in defaults map. Example:
+```C++
+if( auto v = CFDefaultsGetOptionalString( CFSTR("MySetting") ) )
+  cout << "existing setting: " << *v << endl;
+else 
+  CFDefaultsSetString( CFSTR("MySetting"), "42!" );
+```
 
 Habanero/CFStackAllocator.h
 -----------
@@ -28,9 +34,9 @@ Habanero/dispatch_cpp.h
 -----------
 A set of functions providing modern C++ interface for libdispatch API (also known as gcd - Grand Cental Dispatch).
 They use C++11 lambdas as a callbacks and std::chrono values, so you can write something like this:
-
-dispatch_after( 10s, dispatch_get_main_queue(), []{ puts("ten seconds after..."); } );
-
+```C++
+dispatch_after( 10s, dispatch_get_main_queue(), []{ cout << "ten seconds after..." << end; } );
+```
 Following functions are wrapped and are available with the same names via C++ overloading resolution:
   * dispatch_async
   * dispatch_sync
