@@ -141,7 +141,14 @@ sq.Wait();
 
 Habanero/spinlock.h
 -----------
-Spinlock implementation based on C++11 atomics, conforming BasicLockable concept. When thread can't acquire the lock, it will lower it's priority via Mach's swtch_pri() syscall. Also provides useful LOCK_GUARD(lock_object){...} macro and call_locked(lock_object, [=]{....}) template function.
+Spinlock implementation based on C++11 atomics, conforming BasicLockable concept. When thread can't acquire the lock, it will lower own priority via Mach's swtch_pri() syscall. Also provides useful LOCK_GUARD(lock_object){...} macro and call_locked(lock_object, [=]{....}) template function:
+```C++
+spinlock data_lock;
+// ...
+LOCK_GUARD(data_lock) {
+  // concurrently access data
+}
+```
 
 Habanero/tiny_string.h
 -----------
