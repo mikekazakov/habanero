@@ -93,6 +93,9 @@ ObservableBase::ObservationTicket ObservableBase::AddObserver( function<void()> 
 
 void ObservableBase::FireObservers( const uint64_t _mask ) const
 {
+    if( !_mask ) // meaningless call
+        return;
+
     shared_ptr<vector<shared_ptr<Observer>>> observers;
     LOCK_GUARD(m_ObserversLock) {
         observers = m_Observers;
