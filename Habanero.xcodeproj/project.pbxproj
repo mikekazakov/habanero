@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF27F9411E373BDA009A3ACF /* GoogleAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = CF27F9401E373BDA009A3ACF /* GoogleAnalytics.h */; };
+		CF27F9431E373BE4009A3ACF /* GoogleAnalytics.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF27F9421E373BE4009A3ACF /* GoogleAnalytics.mm */; };
 		CF47DF711E063CC500AAAF3C /* DispatchGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = CF47DF701E063CC500AAAF3C /* DispatchGroup.h */; };
 		CF47DF731E063CCF00AAAF3C /* DispatchGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF47DF721E063CCF00AAAF3C /* DispatchGroup.cpp */; };
 		CF8D0D171D98EA4300ADFF14 /* CFStackAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0D161D98EA4300ADFF14 /* CFStackAllocator.cpp */; };
@@ -44,6 +46,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CF27F9401E373BDA009A3ACF /* GoogleAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GoogleAnalytics.h; path = ../habanero/include/Habanero/GoogleAnalytics.h; sourceTree = "<group>"; };
+		CF27F9421E373BE4009A3ACF /* GoogleAnalytics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GoogleAnalytics.mm; path = ../habanero/source/GoogleAnalytics.mm; sourceTree = "<group>"; };
 		CF47DF701E063CC500AAAF3C /* DispatchGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DispatchGroup.h; path = ../habanero/include/Habanero/DispatchGroup.h; sourceTree = "<group>"; };
 		CF47DF721E063CCF00AAAF3C /* DispatchGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DispatchGroup.cpp; path = ../habanero/source/DispatchGroup.cpp; sourceTree = "<group>"; };
 		CF8D0D161D98EA4300ADFF14 /* CFStackAllocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CFStackAllocator.cpp; path = source/CFStackAllocator.cpp; sourceTree = "<group>"; };
@@ -114,6 +118,7 @@
 		CFD62B841C99C2510021EE7F /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				CF27F9401E373BDA009A3ACF /* GoogleAnalytics.h */,
 				CFD62B861C99C2A60021EE7F /* algo.h */,
 				CF9A9F141CACDD3F0094D6F7 /* CFDefaultsCPP.h */,
 				CFD930001D2E3ACE00EE77C4 /* CFStackAllocator.h */,
@@ -139,6 +144,7 @@
 		CFD62B851C99C2590021EE7F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				CF27F9421E373BE4009A3ACF /* GoogleAnalytics.mm */,
 				CF9A9F161CACDD490094D6F7 /* CFDefaultsCPP.cpp */,
 				CF8D0D161D98EA4300ADFF14 /* CFStackAllocator.cpp */,
 				CFD62BA01C99C2AE0021EE7F /* CFString.cpp */,
@@ -175,6 +181,7 @@
 				CFD62B9E1C99C2A60021EE7F /* tiny_string.h in Headers */,
 				CFD62B971C99C2A60021EE7F /* dispatch_cpp.h in Headers */,
 				CFB690571E06710900BBA5BD /* SerialQueue.h in Headers */,
+				CF27F9411E373BDA009A3ACF /* GoogleAnalytics.h in Headers */,
 				CFD930011D2E3ACE00EE77C4 /* CFStackAllocator.h in Headers */,
 				CFD62B951C99C2A60021EE7F /* CommonPaths.h in Headers */,
 				CFD6DD201D6C44B8006B94C2 /* Observable.h in Headers */,
@@ -259,6 +266,7 @@
 				CFD62BB51C99C2AE0021EE7F /* IdleSleepPreventer.cpp in Sources */,
 				CFD62BAE1C99C2AE0021EE7F /* CommonPaths.cpp in Sources */,
 				CF47DF731E063CCF00AAAF3C /* DispatchGroup.cpp in Sources */,
+				CF27F9431E373BE4009A3ACF /* GoogleAnalytics.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,7 +276,6 @@
 		CFD62B791C99C19A0021EE7F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -301,7 +308,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/include";
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/include",
+					/usr/local/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -318,7 +328,6 @@
 		CFD62B7A1C99C19A0021EE7F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -345,7 +354,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/include";
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/include",
+					/usr/local/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CPLUSPLUSFLAGS = (

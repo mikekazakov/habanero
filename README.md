@@ -67,6 +67,20 @@ dg.Run( []{ /* estimate fallout at the same time */ } );
 dg.Wait();
 ```
 
+Habanero/GoogleAnalytics.h
+-----------
+Yet another Google Analytics client, this time for C++/macOS platform. Supposed to work fast and perform sending in background thread. By default this service is disabled, it's availability is controlled by boolean GoogleAnalytics::g_DefaultsTrackingEnabledKey user defaults key. Requires Boost. General idea of usage:
+```C++
+// Init singleton somewhere
+GoogleAnalytics& GA()
+{
+    static auto inst = new GoogleAnalytics( "UA-XXXXXXXX-X" );
+    return *inst;
+}
+// Call upon some event
+GA().PostEvent("Some Event Category", "Some Event Action", "Some Event Label");
+```
+
 Habanero/Hash.h
 -----------
 Hash/checksum calculation facility, supporting Adler32/CRC32/MD2/MD4/MD5/SHA1_160/SHA2_224/SHA2_256/SHA2_384/SHA2_512.
