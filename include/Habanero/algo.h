@@ -101,6 +101,14 @@ inline bool has_prefix( const std::string &_string, const std::string &_prefix )
                     std::begin(_string));
 }
 
+inline bool has_suffix( const std::string &_string, const std::string &_suffix )
+{
+    return _string.size() >= _suffix.size() &&
+        std::equal( std::begin(_suffix),
+                    std::end(_suffix),
+                    std::begin(_string) + _string.size() - _suffix.size() );
+}
+
 class upward_flag
 {
     bool _state = false;
