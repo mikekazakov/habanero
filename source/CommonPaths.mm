@@ -26,8 +26,9 @@ static std::string ensure_tr_slash( std::string _str )
     
 const std::string &AppTemporaryDirectory() noexcept
 {
-    static const auto path = ensure_tr_slash( NSTemporaryDirectory().fileSystemRepresentation );
-    return path;
+    static const auto path = new std::string(
+        ensure_tr_slash( NSTemporaryDirectory().fileSystemRepresentation ) );
+    return *path;
 }
 
 }
