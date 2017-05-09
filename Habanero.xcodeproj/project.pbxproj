@@ -12,6 +12,7 @@
 		CF47DF711E063CC500AAAF3C /* DispatchGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = CF47DF701E063CC500AAAF3C /* DispatchGroup.h */; };
 		CF47DF731E063CCF00AAAF3C /* DispatchGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF47DF721E063CCF00AAAF3C /* DispatchGroup.cpp */; };
 		CF8D0D171D98EA4300ADFF14 /* CFStackAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0D161D98EA4300ADFF14 /* CFStackAllocator.cpp */; };
+		CF90C0C21EC1B35E0056E3B8 /* spinlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF90C0C11EC1B35E0056E3B8 /* spinlock.cpp */; };
 		CF9A9F151CACDD3F0094D6F7 /* CFDefaultsCPP.h in Headers */ = {isa = PBXBuildFile; fileRef = CF9A9F141CACDD3F0094D6F7 /* CFDefaultsCPP.h */; };
 		CF9A9F171CACDD490094D6F7 /* CFDefaultsCPP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9A9F161CACDD490094D6F7 /* CFDefaultsCPP.cpp */; };
 		CFB690551E06710000BBA5BD /* SerialQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB690541E0670FF00BBA5BD /* SerialQueue.cpp */; };
@@ -51,6 +52,7 @@
 		CF47DF701E063CC500AAAF3C /* DispatchGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DispatchGroup.h; path = ../habanero/include/Habanero/DispatchGroup.h; sourceTree = "<group>"; };
 		CF47DF721E063CCF00AAAF3C /* DispatchGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DispatchGroup.cpp; path = ../habanero/source/DispatchGroup.cpp; sourceTree = "<group>"; };
 		CF8D0D161D98EA4300ADFF14 /* CFStackAllocator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CFStackAllocator.cpp; path = source/CFStackAllocator.cpp; sourceTree = "<group>"; };
+		CF90C0C11EC1B35E0056E3B8 /* spinlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = spinlock.cpp; path = ../habanero/source/spinlock.cpp; sourceTree = "<group>"; };
 		CF9A9F141CACDD3F0094D6F7 /* CFDefaultsCPP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CFDefaultsCPP.h; path = include/Habanero/CFDefaultsCPP.h; sourceTree = "<group>"; };
 		CF9A9F161CACDD490094D6F7 /* CFDefaultsCPP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CFDefaultsCPP.cpp; path = source/CFDefaultsCPP.cpp; sourceTree = "<group>"; };
 		CFB690541E0670FF00BBA5BD /* SerialQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SerialQueue.cpp; path = ../habanero/source/SerialQueue.cpp; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 		CFD62B851C99C2590021EE7F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				CF90C0C11EC1B35E0056E3B8 /* spinlock.cpp */,
 				CF27F9421E373BE4009A3ACF /* GoogleAnalytics.mm */,
 				CF9A9F161CACDD490094D6F7 /* CFDefaultsCPP.cpp */,
 				CF8D0D161D98EA4300ADFF14 /* CFStackAllocator.cpp */,
@@ -262,6 +265,7 @@
 				CFD62BB81C99C2AE0021EE7F /* tiny_string.cpp in Sources */,
 				CFD62BAF1C99C2AE0021EE7F /* CommonPaths.mm in Sources */,
 				CFD6DD221D6C44C1006B94C2 /* Observable.cpp in Sources */,
+				CF90C0C21EC1B35E0056E3B8 /* spinlock.cpp in Sources */,
 				CFD62BB41C99C2AE0021EE7F /* Hash.cpp in Sources */,
 				CFD62BB51C99C2AE0021EE7F /* IdleSleepPreventer.cpp in Sources */,
 				CFD62BAE1C99C2AE0021EE7F /* CommonPaths.cpp in Sources */,

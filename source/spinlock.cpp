@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Michael G. Kazakov
+/* Copyright (c) 2017 Michael G. Kazakov
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation the rights to use, copy, modify, merge, publish, distribute,
@@ -11,30 +11,17 @@
  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
-#pragma once
+#include <Habanero/spinlock.h>
+#include <mach/mach.h>
 
-#include <atomic>
-#include <mutex>
-
-class spinlock
+void spinlock::lock() noexcept
 {
-    std::atomic_flag __flag = ATOMIC_FLAG_INIT ;
-public:
-    void lock() noexcept;
-    void unlock() noexcept;
-};
+    while( __flag.test_and_set(std::memory_order_acquire) ) {
+        swtch_pri(0); // talking to Mach directly
+    }
+}
 
-#define __LOCK_GUARD_TOKENPASTE(x, y) x ## y
-#define __LOCK_GUARD_TOKENPASTE2(x, y) __LOCK_GUARD_TOKENPASTE(x, y)
-#define LOCK_GUARD(lock_object) bool __LOCK_GUARD_TOKENPASTE2(__lock_guard_go_, __LINE__) = true; \
-    for(std::lock_guard<decltype(lock_object)> __LOCK_GUARD_TOKENPASTE2(__lock_guard_, __LINE__)(lock_object); \
-        __LOCK_GUARD_TOKENPASTE2(__lock_guard_go_, __LINE__); \
-        __LOCK_GUARD_TOKENPASTE2(__lock_guard_go_, __LINE__) = false \
-        )
-
-template <typename _Lock, typename _Callable>
-auto call_locked( _Lock &_lock, _Callable _callable )
+void spinlock::unlock() noexcept
 {
-    std::lock_guard<_Lock> guard(_lock);
-    return _callable();
+    __flag.clear(std::memory_order_release);
 }
