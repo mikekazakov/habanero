@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Michael G. Kazakov
+/* Copyright (c) 2016-17 Michael G. Kazakov
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation the rights to use, copy, modify, merge, publish, distribute,
@@ -18,17 +18,21 @@
 struct CFStackAllocator
 {
     CFStackAllocator() noexcept;
+    ~CFStackAllocator() noexcept;
 
     inline CFAllocatorRef Alloc() const noexcept { return m_Alloc; }
     
 private:
-    static const int        m_Size = 4096;
-    char                    m_Buffer[m_Size];
-    // these members should be last to keep cache happy:
-    int                     m_Left;
-    const CFAllocatorRef    m_Alloc;
+    CFStackAllocator(const CFStackAllocator&) = delete;
+    void operator =(const CFStackAllocator&) = delete;
+    CFAllocatorRef Construct() noexcept;
+    static void *DoAlloc(CFIndex _alloc_size, CFOptionFlags _hint, void *_info);
+    static void DoDealloc(void *_ptr, void *_info);
     
-    CFAllocatorRef __Construct() noexcept;
-    static void *__DoAlloc(CFIndex allocSize, CFOptionFlags hint, void *info);
-    static void  __DoDealloc(void *ptr, void *info);
+    static const int        m_Size = 4096 - 16;
+    char                    m_Buffer[m_Size];
+    int                     m_Left;
+    short                   m_StackObjects;
+    short                   m_HeapObjects;
+    const CFAllocatorRef    m_Alloc;
 };

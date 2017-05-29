@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 Michael G. Kazakov
+/* Copyright (c) 2016-2017 Michael G. Kazakov
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation the rights to use, copy, modify, merge, publish, distribute,
@@ -13,12 +13,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 #include <Habanero/CFStackAllocator.h>
 
+#include <iostream>
+
 CFStackAllocator::CFStackAllocator() noexcept:
     m_Left(m_Size),
-    m_Alloc(__Construct())
-{}
+    m_StackObjects(0),
+    m_HeapObjects(0),
+    m_Alloc(Construct())
+{
+    static_assert( sizeof(CFStackAllocator) == m_Size + 16 );
+}
 
-CFAllocatorRef CFStackAllocator::__Construct() noexcept
+CFStackAllocator::~CFStackAllocator() noexcept
+{
+    CFRelease(m_Alloc);
+    if( m_StackObjects || m_HeapObjects )
+        std::cerr << "CFStackAllocator was deallocated with leaked objects:" << std::endl
+                  << "  alive stack objects: " << m_StackObjects << std::endl
+                  << "  alive heap objects:  " << m_HeapObjects << std::endl;
+}
+
+CFAllocatorRef CFStackAllocator::Construct() noexcept
 {
     CFAllocatorContext context = {
         0,
@@ -26,29 +41,37 @@ CFAllocatorRef CFStackAllocator::__Construct() noexcept
         nullptr,
         nullptr,
         nullptr,
-        __DoAlloc,
+        DoAlloc,
         nullptr,
-        __DoDealloc,
+        DoDealloc,
         nullptr
     };
     return CFAllocatorCreate(kCFAllocatorUseContext, &context);
 }
 
-void *CFStackAllocator::__DoAlloc(CFIndex allocSize, CFOptionFlags hint, void *info)
+void *CFStackAllocator::DoAlloc(CFIndex _alloc_size, CFOptionFlags _hint, void *_info)
 {
-    CFStackAllocator *me = (CFStackAllocator *)info;
-    if( allocSize <= me->m_Left ) {
+    auto me = (CFStackAllocator *)_info;
+    if( _alloc_size <= me->m_Left ) {
         void *v = me->m_Buffer + m_Size - me->m_Left;
-        me->m_Left -= allocSize;
+        me->m_Left -= _alloc_size;
+        me->m_StackObjects++;
         return v;
     }
-    else
-        return malloc(allocSize);
+    else {
+        me->m_HeapObjects++;
+        return malloc(_alloc_size);
+    }
 }
 
-void CFStackAllocator::__DoDealloc(void *ptr, void *info)
+void CFStackAllocator::DoDealloc(void *_ptr, void *_info)
 {
-    CFStackAllocator *me = (CFStackAllocator *)info;
-    if( ptr < me->m_Buffer || ptr >= me->m_Buffer + m_Size )
-        free(ptr);
+    auto me = (CFStackAllocator *)_info;
+    if( _ptr < me->m_Buffer || _ptr >= me->m_Buffer + m_Size ) {
+        free(_ptr);
+        me->m_HeapObjects--;
+    }
+    else {
+        me->m_StackObjects--;
+    }
 }
